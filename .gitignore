@@ -1,8 +1,9 @@
 # ignore test and comp files 
 *.tst
 *.out 
+*.cmp
 
-# ignore tools dir 
+#ignore tools dir 
 /tools 
 
 # mac / vs things 
