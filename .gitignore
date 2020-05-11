@@ -1,0 +1,13 @@
+# ignore test and comp files 
+*.tst
+*.out 
+
+# ignore tools dir 
+/tools 
+
+# mac / vs things 
+.DS* 
+.vs* 
+.VS* 
+
+
