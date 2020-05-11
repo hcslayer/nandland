@@ -16,5 +16,44 @@ CHIP DMux8Way {
     OUT a, b, c, d, e, f, g, h;
 
     PARTS:
-    // Put your code here:
+    Not(in=sel[0], out=nsel0); 
+    Not(in=sel[1], out=nsel1); 
+    Not(in=sel[2], out=nsel2); 
+
+    // dmux conditions
+    // 0 0 0  
+    And(a=nsel0, b=nsel1, out=c0); 
+    And(a=nsel2, b=c0, out=conda); 
+    And(a=in, b=conda, out=a); 
+
+    // 0 0 1 
+    And(a=sel[0], b=nsel1, out=c1); 
+    And(a=nsel2, b=c1, out=condb); 
+    And(a=in, b=condb, out=b); 
+
+    // 0 1 0 
+    And(a=nsel0, b=sel[1], out=c2); 
+    And(a=nsel2, b=c2, out=condc); 
+    And(a=in, b=condc, out=c); 
+
+    // 0 1 1 
+    And(a=sel[0], b=sel[1], out=c3); 
+    And(a=nsel2, b=c3, out=condd); 
+    And(a=in, b=condd, out=d); 
+
+    // 1 0 0 
+    And(a=sel[2], b=c0, out=conde); 
+    And(a=in, b=conde, out=e); 
+
+    // 1 0 1 
+    And(a=sel[2], b=c1, out=condf); 
+    And(a=in, b=condf, out=f); 
+
+    // 1 1 0 
+    And(a=sel[2], b=c2, out=condg); 
+    And(a=in, b=condg, out=g); 
+
+    // 1 1 1 
+    And(a=sel[2], b=c3, out=condh); 
+    And(a=in, b=condh, out=h);  
 }
