@@ -16,5 +16,24 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    /* zero */ 
+    Or16(a=false, b=false, out=zero16);
+    
+    /* look for loads, inc, or reset */  
+    Or(a=load, b=inc, out=loadsig);
+    Or(a=loadsig, b=reset, out=interrupt); 
+
+    /* set 'in' properly */ 
+    /* select between inc and load */ 
+    Mux16(a=inctotal, b=in, sel=load, out=continue); 
+
+    /* select between inc/load and reset */ 
+    Mux16(a=continue, b=zero16, sel=reset, out=regin); 
+    
+    /* load register */ 
+    Register(in=regin, load=interrupt, out=regout); 
+    And16(a=regout, b=true, out=out); 
+
+    /* store incremented total for later */ 
+    Inc16(in=regout, out=inctotal); 
 }
