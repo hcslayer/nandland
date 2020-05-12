@@ -42,5 +42,39 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    /* !x, !y */ 
+    Not16(in=x, out=xnot); 
+    Not16(in=y, out=ynot); 
+
+    Mux16(a=x, b=ynot, sel=nx, out=xt); 
+    Mux16(a=y, b=xnot, sel=ny, out=yt); 
+
+    /* zero x or y as needed */
+    Mux16(a=xt, b=false, sel=zx, out=xfin); 
+    Mux16(a=yt, b=false, sel=zy, out=yfin); 
+
+    /* compute + or & */ 
+    Add16(a=xfin, b=yfin, out=sumout); 
+    And16(a=xfin, b=yfin, out=andout); 
+
+    /* determine function, negate output if needed */ 
+    Mux16(a=andout, b=sumout, sel=f, out=total); 
+    Not16(in=total, out=ntotal); 
+    Mux16(a=total, b=ntotal, sel=no, out=final); 
+
+    /* set output */ 
+    Or16(a=final, b=false, out=out); 
+
+    /* is zero? */ 
+    And16(a=final, b=true, out[0..7]=lower); 
+    And16(a=final, b=true, out[8..15]=upper); 
+    Or8Way(in=lower, out=loweror); 
+    Or8Way(in=upper, out=upperor); 
+    And(a=loweror, b=upperor, out=nonzero);
+    Not(in=nonzero, out=zr);
+
+    /* is negative? */ 
+    Or16(a=final, b=false, out[15]=ng); 
+
+    /* NOTE: hung up on an ALU test. Not sure what the issue is (@callback) */ 
 }
